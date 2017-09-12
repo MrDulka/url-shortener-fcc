@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/MrDulka/url-shortener-fcc#readme",
   "dependencies": {
+    "dotenv": "^4.0.0",
     "express": "^4.15.4",
     "mongodb": "^2.2.31"
   }

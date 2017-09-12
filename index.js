@@ -1,22 +1,11 @@
-var express = require('express');
+require('dotenv').config();
 
-var app = express();
+const MongoClient = require('mongodb').MongoClient;
 
-var port = process.env.PORT || 5000;
+const dbURI = process.env.MONGOLAB_URI;
 
-app.get('/', function(req, res){
-  var ip = req.ip;
-  var language = req.headers["accept-language"].match(/(.*?)[;,]/)[1];
-  var software = req.headers["user-agent"].match(/\((.*?)\)/)[1];
+const dbConnection = MongoClient.connect(dbURI);
 
-  var response = {
-    "ipaddress": req.ip,
-    "language": language,
-    "software": software
-  }
-  res.writeHead(200, {"Content-Type": "text/plain"});
-  res.end(JSON.stringify(response));
-});
-
-
-app.listen(port);
+const WebApplication = require('./scripts/webapp/WebApplication.js');
+const webapp = new WebApplication(dbConnection);
+webapp.start();
