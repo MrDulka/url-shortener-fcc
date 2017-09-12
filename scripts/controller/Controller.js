@@ -6,6 +6,7 @@
    constructor(app, database){
      app.get('/new/*', this.input.bind(this));
      app.get('/:code', this.find.bind(this));
+     app.get('/test', this.test.bind(this));
      this._database = database;
    }
 
@@ -28,6 +29,10 @@
        }
      })
      .catch(err => console.log(err));
+   }
+
+   test(req, res){
+     res.end("ho ho ho");
    }
  }
 
