@@ -25,6 +25,10 @@
      return new Promise((resolve, reject) => {
        const query = {"short_url": "https://not-so-short-url.herokuapp.com/" + code};
        this._db.collection('urls').findOne(query).then(doc => {
+         if(!doc) {
+           resolve(null);
+           return;
+         }
          const url = doc.original_url;
          resolve(url);
        })
