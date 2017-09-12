@@ -10,20 +10,19 @@
    }
 
    input(req, res){
-     console.log(req.params.url);
-     console.log(this);
      this._database.store(req.params.url)
-     .then(() => {
-       res.end('success');
+     .then((encoded) => {
+       res.end(JSON.stringify(encoded));
      })
      .catch(err => console.log(err));
    }
 
    find(req, res){
-    /* this._database.find(req.params.code)
-     .then()
-
-     console.log();*/
+     this._database.find(req.params.code)
+     .then(url => {
+       res.redirect(url)
+     })
+     .catch(err => console.log(err));
    }
 
 

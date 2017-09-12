@@ -12,20 +12,33 @@
     * @param {Object} url
     */
    store(url){
-     const encoded = this.encode(url);
-     return this._db.collection('urls').insert(obj);
+     return new Promise((resolve, reject) => {
+       const encoded = this.encode(url);
+       this._db.collection('urls').insertOne(encoded).then(()=> {
+         resolve(encoded);
+       })
+       .catch(err => console.log(err));
+     });
    }
 
    find(code){
-
+     return new Promise((resolve, reject) => {
+       const query = {"short_url": "https://not-so-short-url.herokuapp.com/" + code};
+       this._db.collection('urls').findOne(query).then(doc => {
+         const url = doc.original_url;
+         resolve(url);
+       })
+       .catch(err => console.log(err));
+     });
    }
 
    encode(url){
-     const code = 10000 + Math.random()*90000;
+     const code = 10000 + Math.floor(Math.random()*90000);
      const encoded = {
        "original_url": url,
-       "short_url": code
+       "short_url": "https://not-so-short-url.herokuapp.com/" + code
      }
+     return encoded;
    }
  }
 
