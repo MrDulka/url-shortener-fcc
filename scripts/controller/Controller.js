@@ -5,7 +5,7 @@
  class Controller {
    constructor(app, database){
      app.get('/new/*', this.input.bind(this));
-     app.get('/:code', this.find.bind(this));
+    // app.get('/:code', this.find.bind(this));
      app.get('/test', this.test.bind(this));
      this._database = database;
    }
