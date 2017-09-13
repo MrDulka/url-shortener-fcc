@@ -8,8 +8,10 @@
    }
 
    /**
-    *
-    * @param {Object} url
+    * Store a url in the database, encoding it first
+    * @param {string} url - url to be stored
+    * @return {Promise} promise that resolves after the url was stored
+    * with an object containg the pair of original and encoded urls
     */
    store(url){
      return new Promise((resolve, reject) => {
@@ -23,6 +25,12 @@
      });
    }
 
+   /**
+    * Finds the code in the database
+    * @param {number} code - code that we are searching for
+    * @return {promise} promise that resolves with a string containing the original url
+    * that is encoded under this code
+    */
    find(code){
      return new Promise((resolve, reject) => {
        const query = {"short_url": "https://not-so-short-url.herokuapp.com/" + code};
@@ -38,6 +46,12 @@
      });
    }
 
+   /**
+    * Creates a code for the given url, checking if it is unique
+    * @param {string} url - url to be encoded
+    * @return {Promise} promise that resolves with an object containing the pair
+    * of the original url and the encoded url
+    */
    encode(url){
      return new Promise((resolve, reject) => {
        this._db.collection('urls').find().toArray().then(docs => {
