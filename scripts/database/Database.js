@@ -13,9 +13,11 @@
     */
    store(url){
      return new Promise((resolve, reject) => {
-       const encoded = this.encode(url);
-       this._db.collection('urls').insertOne(encoded).then(()=> {
-         resolve(encoded);
+       this.encode(url)
+       .then(encoded => {
+         this._db.collection('urls').insertOne(encoded).then(() => {
+           resolve(encoded);
+         });
        })
        .catch(err => console.log(err));
      });
@@ -37,28 +39,28 @@
    }
 
    encode(url){
-     this._db.collection('urls').find().toArray().then(docs => {
-       do {
-         var code = 10000 + Math.floor(Math.random()*90000);
-         var found = false;
+     return new Promise((resolve, reject) => {
+       this._db.collection('urls').find().toArray().then(docs => {
+         do {
+           var code = 10000 + Math.floor(Math.random()*90000);
+           var found = false;
 
-         docs.forEach(doc => {
-           if(!doc.short_url) return;
-           let storedCode = doc.short_url.match(/\d+$/)[0];
-           if(code == storedCode){
-              found = true;
-           }
-         })
-       } while(found === true);
+           docs.forEach(doc => {
+             if(!doc.short_url) return;
+             let storedCode = doc.short_url.match(/\d+$/)[0];
+             if(code == storedCode){
+                found = true;
+             }
+           })
+         } while(found === true);
 
-       const encoded = {
-         "original_url": url,
-         "short_url": "https://not-so-short-url.herokuapp.com/" + code
-       };
-       console.log(encoded);
-       return encoded;
+         const encoded = {
+           "original_url": url,
+           "short_url": "https://not-so-short-url.herokuapp.com/" + code
+         };
+         resolve(encoded);
+       });
      });
-
    }
  }
 
