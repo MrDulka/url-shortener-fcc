@@ -17,9 +17,14 @@
      return new Promise((resolve, reject) => {
        this.encode(url)
        .then(encoded => {
-         this._db.collection('urls').insertOne(encoded).then(() => {
-           resolve(encoded);
-         });
+         return this._db.collection('urls').insertOne(encoded);
+       })
+       .then(result => {
+         let inserted = result.ops[0];
+         /*since inserting encoded pair mutates it and adds _id property, we
+         have to reverse this and delete the _id property before resolving */
+         delete inserted._id;
+         resolve(inserted);
        })
        .catch(err => console.log(err));
      });
