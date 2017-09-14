@@ -1,3 +1,4 @@
+const path = require('path');
 /*
  * class representing the controller
  */
@@ -9,6 +10,7 @@
    constructor(app, database){
      app.get('/new/*', this.input.bind(this));
      app.get('/:code', this.find.bind(this));
+     app.get('/', this.home.bind(this));
      this._database = database;
    }
 
@@ -40,6 +42,9 @@
      .catch(err => console.log(err));
    }
 
+   home(req, res){
+     res.sendFile(path.join(__dirname+'/../../index.html'));
+   }
  }
 
  module.exports = Controller;
