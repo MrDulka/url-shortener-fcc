@@ -1,7 +1,7 @@
+const validUrl = require('valid-url');
 /*
  * class representing the database
  */
-
  class Database {
    constructor(db) {
      this._db = db;
@@ -15,6 +15,10 @@
     */
    store(url){
      return new Promise((resolve, reject) => {
+       if (!validUrl.isWebUri(url)){
+         resolve({error: "Wrong url format"});
+         return;
+       }
        this.encode(url)
        .then(encoded => {
          return this._db.collection('urls').insertOne(encoded);
